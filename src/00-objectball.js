@@ -118,41 +118,27 @@ const gameObject = () => {
 
 // function to get player's score
 
-const numPointsScored = (names) => {
-    const game = gameObject();
-    for(const gameKey in game ){
-        const teamObj = game[gameKey];
-        const data = teamObj.players;
-        
-          for(const key in data){
-              const player = key;
-              if( player === names){
-                const points = data[key].points
-                return `${names} has scored ${points} points.`
-              }
-          }
-    }
-};
-numPointsScored();
+const homeTeam = () => gameObject().home;
+
+const awayTeam = () => gameObject().away;
+
+const players = () => Object.assign({}, homeTeam().players, awayTeam().players);
+
+const teams = Object.values(gameObject());
+console.log((teams));
+
+const numPointsScored = (playerNames) => {
+    return `${playerNames} has scored ${players()[playerNames].points} points`
+}
+
+
 
 // function to return players shoe size
 
-const shoeSize = (names) => {
-    const game = gameObject();
-    for(const gameKey in game ){
-        const teamObj = game[gameKey];
-        const data = teamObj.players;
-        
-          for(const key in data){
-              const player = key;
-              if( player === names){
-                const shoeSize = data[key].shoe
-                return `${names} shoe size is ${shoeSize}.`
-              }
-          }
-    }
+const shoeSize = (playerNames) => {
+    return `${playerNames} shoe size is ${players()[playerNames].shoe}.`
 };
-shoeSize();
+
 
 // function to return the teams colors
 
@@ -226,7 +212,7 @@ const bigShoeRebounds = () => {
         const data = teamObj.players;
         
         for(const key in data){
-            console.log(data[key])
+            
             const player = key;
             const shoeSize = data[key].shoe;
         //    const maxShoes = shoeSize.reduce((accumulator, element) => Math.max(accumulator, element))

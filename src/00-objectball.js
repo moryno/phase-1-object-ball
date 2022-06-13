@@ -122,52 +122,35 @@ const homeTeam = () => gameObject().home;
 
 const awayTeam = () => gameObject().away;
 
+const teams = () => [homeTeam(), awayTeam()]
+
 const players = () => Object.assign({}, homeTeam().players, awayTeam().players);
 
-const teams = Object.values(gameObject());
-console.log((teams));
 
-const numPointsScored = (playerNames) => {
-    return `${playerNames} has scored ${players()[playerNames].points} points`
-}
+const numPointsScored = playerNames => `${playerNames} has scored ${players()[playerNames].points} points`
 
 
 
 // function to return players shoe size
 
-const shoeSize = (playerNames) => {
-    return `${playerNames} shoe size is ${players()[playerNames].shoe}.`
-};
+const shoeSize = playerNames => `${playerNames} shoe size is ${players()[playerNames].shoe}.`
+
 
 
 // function to return the teams colors
 
-const teamColors = (name) => {
-    const game = gameObject();
-    for(const gameKey in game ){
-        const teamObj = game[gameKey];
-        const teamName = teamObj.teamName;
-        const teamColors = teamObj.colors;
-        if(teamName === name){
-            return `${name} team colors are = [${teamColors}]`
+const teamColors = (clubName) => {
+    let color;
+   teams().find(club => {
+        if(club.teamName === clubName){
+            color = club.colors
         }
     }
+    )
+    return color
 }
-teamColors();
-
-// function to return all teams name
-
-const teamNames = () => {
-    const game = gameObject();
-    const colors = [];
-    for(const gameKey in game ){
-        const teamObj = game[gameKey];
-        const teamName = teamObj.teamName;
-        colors.push(`The team name is ${teamName}`)
-    }
-    return colors
-}
-teamNames();
+// function to return team names in an array
+const teamNames = () => [homeTeam().teamName, awayTeam().teamName];
 
 // function to return jersey numbers of the team
 
@@ -180,6 +163,7 @@ const playerNumbers = (name) => {
         const data = teamObj.players;
         if(teamName === name){
           for(const key in data){
+            
               const number = data[key].number;
             teamPlayerNumbers.push(`${number}`)
           }
@@ -187,38 +171,30 @@ const playerNumbers = (name) => {
     }
     return `Jersey numbers for ${name} are [${teamPlayerNumbers}]`;
 }
-playerNumbers();
+
 
 // function to display players stats
-const playerStats = (names) => {
-    const game = gameObject();
-    for(const gameKey in game ){
-        const teamObj = game[gameKey];
-        const data = teamObj.players;
-        for(const key in data){
-            const player = key;
-            if( player === names){
-              return data[key]
-            }
-        }
-    }
+const playerStats = playerName => players()[playerName]
+
+// function to find largest shoes
+const largestShoes = () => {
+    const maxShoe = []
+   for(const key in players()){
+    maxShoe.push(players()[key].shoe)
+   }
+  return Math.max(...maxShoe)
 }
-playerStats();
+
+// function to return rebound associated with largest shoes
 
 const bigShoeRebounds = () => {
-    const game = gameObject();
-    for(const gameKey in game){
-        const teamObj = game[gameKey];
-        const data = teamObj.players;
-        
-        for(const key in data){
-            
-            const player = key;
-            const shoeSize = data[key].shoe;
-        //    const maxShoes = shoeSize.reduce((accumulator, element) => Math.max(accumulator, element))
-           
+    let rebounds;
+    for(const key in players()){
+        if(players()[key].shoe === largestShoes()){
+          rebounds = players()[key].rebounds
         }
-    }
+       }
+       return rebounds;
 }
 
-bigShoeRebounds()
+
